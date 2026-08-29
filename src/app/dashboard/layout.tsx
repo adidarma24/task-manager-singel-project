@@ -23,7 +23,10 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex">
-      <Sidebar userName={profile?.full_name ?? user.email ?? "User"} />
+      <Sidebar
+        userName={profile?.full_name ?? user.email ?? "User"}
+        role={profile?.role ?? "member"}
+      />
       <main className="flex-1 overflow-y-auto bg-background">{children}</main>
     </div>
   );

@@ -2,15 +2,23 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutGrid, ListTodo, LogOut } from "lucide-react";
+import { LayoutGrid, ListTodo, LogOut, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { clsx } from "clsx";
+import type { UserRole } from "@/types";
 
 const navItems = [
-  { href: "/dashboard", label: "Task", icon: ListTodo },
+  { href: "/dashboard", label: "Task", icon: ListTodo, adminOnly: false },
+  { href: "/dashboard/team", label: "Kelola Tim", icon: Users, adminOnly: true },
 ];
 
-export function Sidebar({ userName }: { userName: string }) {
+export function Sidebar({
+  userName,
+  role,
+}: {
+  userName: string;
+  role: UserRole;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
@@ -21,6 +29,10 @@ export function Sidebar({ userName }: { userName: string }) {
     router.refresh();
   }
 
+  const visibleItems = navItems.filter(
+    (item) => !item.adminOnly || role === "admin"
+  );
+
   return (
     <aside className="flex h-screen w-60 flex-col border-r bg-card">
       <div className="flex items-center gap-2 border-b px-5 py-4">
@@ -29,9 +41,12 @@ export function Sidebar({ userName }: { userName: string }) {
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const Icon = item.icon;
-          const active = pathname.startsWith(item.href);
+          const active =
+            item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
