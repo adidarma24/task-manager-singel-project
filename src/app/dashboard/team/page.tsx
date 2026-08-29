@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { InviteMemberButton } from "@/components/team/invite-member-button";
+import { CreateMemberButton } from "@/components/team/create-member-button";
 import { TeamTable } from "@/components/team/team-table";
 import type { Profile } from "@/types";
 
@@ -35,10 +35,10 @@ export default async function TeamPage() {
         <div>
           <h1 className="text-lg font-semibold">Kelola Tim</h1>
           <p className="text-sm text-muted-foreground">
-            Undang anggota baru dan atur role akses mereka.
+            Buat akun anggota baru dan atur role akses mereka.
           </p>
         </div>
-        <InviteMemberButton />
+        <CreateMemberButton />
       </div>
 
       <TeamTable members={(members as Profile[]) ?? []} currentUserId={user.id} />

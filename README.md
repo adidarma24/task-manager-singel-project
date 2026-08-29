@@ -23,7 +23,7 @@ Buka http://localhost:3000
 
 ## 3. Membuat user pertama (Admin)
 
-Karena sistem ini **invite-only**, user PERTAMA harus dibuat manual dari dashboard Supabase (belum ada Admin yang bisa mengundang lewat aplikasi).
+Karena sistem ini **invite-only**, user PERTAMA harus dibuat manual dari dashboard Supabase (belum ada Admin yang bisa membuat user lain lewat aplikasi).
 
 1. Buka **Authentication → Users** di dashboard Supabase
 2. Klik **Add user** → **Create new user**
@@ -32,20 +32,19 @@ Karena sistem ini **invite-only**, user PERTAMA harus dibuat manual dari dashboa
 
 Untuk anggota tim berikutnya, gunakan halaman **Kelola Tim** di dalam aplikasi (lihat bagian di bawah) — tidak perlu lagi buka dashboard Supabase.
 
-## 4. Fitur Kelola Tim (invite user dari UI)
+## 4. Fitur Kelola Tim (Admin buat akun langsung, tanpa email)
 
-Setelah punya 1 Admin, Admin bisa mengundang anggota baru langsung dari aplikasi:
+Karena aplikasi ini untuk tim internal, alurnya dibuat sesederhana mungkin — **tidak ada email undangan sama sekali**. Admin langsung menentukan email dan password untuk anggota baru:
 
 1. Login sebagai Admin → menu **Kelola Tim** akan muncul di sidebar
-2. Klik **Undang Anggota** → isi nama, email, dan role
-3. Sistem mengirim email undangan (lewat fitur bawaan Supabase Auth) berisi link untuk mengatur password
-4. Setelah anggota mengklik link dan mengatur password, mereka bisa login normal di `/login`
+2. Klik **Tambah Anggota** → isi nama, email, dan role (password sudah otomatis diisi acak, boleh diganti manual)
+3. Klik **Buat Akun** → kredensial (email + password) langsung ditampilkan di layar
+4. Salin dan bagikan ke anggota tim lewat cara apa pun yang biasa dipakai (WhatsApp, dsb.)
+5. Anggota langsung bisa login di `/login` pakai kredensial tersebut
 
 **Setup tambahan yang WAJIB untuk fitur ini:**
 
 - Tambahkan environment variable `SUPABASE_SERVICE_ROLE_KEY` (ambil dari **Project Settings → API → Secret keys**) — baik di `.env.local` maupun di Vercel. **Jangan** pakai prefix `NEXT_PUBLIC_` supaya key ini tidak pernah terkirim ke browser.
-- Buka **Authentication → URL Configuration** di dashboard Supabase, isi **Site URL** dengan domain aplikasi kamu (misal `https://task-manager-singel-project.vercel.app`) supaya link di email undangan mengarah ke tempat yang benar.
-- Supabase gratis mengirim email lewat sistem bawaan dengan batas tertentu per jam — cukup untuk tim kecil. Kalau butuh volume lebih besar nanti, bisa hubungkan SMTP sendiri di **Authentication → Emails**.
 
 
 ## 4. Deploy ke Vercel (gratis)
@@ -78,7 +77,7 @@ supabase/
 - Lihat task dalam tampilan **Kanban** (drag & drop antar status) dan **List/Table**
 - Tambah, edit, dan hapus task lewat modal form (assign, status, prioritas, tenggat)
 - Role: Admin, Manager, Anggota (aturan akses diatur lewat Row Level Security di database)
-- **Kelola Tim**: Admin bisa mengundang anggota baru lewat email dan mengubah role anggota — langsung dari aplikasi
+- **Kelola Tim**: Admin bisa membuat akun anggota baru langsung (email + password ditentukan Admin, tanpa email undangan) dan mengubah role anggota — langsung dari aplikasi
 
 ## Belum tersedia — rencana berikutnya
 

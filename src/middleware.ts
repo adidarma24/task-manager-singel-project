@@ -27,16 +27,9 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isAuthPage = request.nextUrl.pathname.startsWith("/login");
-  // /auth/callback: belum ada session saat request masuk (baru akan dibuat
-  // di dalam route handler-nya), jadi harus dilewatkan dulu.
-  // /set-password: user sudah login (session dibuat oleh /auth/callback),
-  // tapi belum wajib punya password final — tetap butuh session, jadi
-  // TIDAK dikecualikan dari pengecekan !user, hanya dikecualikan dari
-  // pengecekan "sudah login tidak boleh buka halaman ini" seperti login.
-  const isPublicPath = request.nextUrl.pathname.startsWith("/auth/callback");
 
-  // Belum login & bukan halaman publik -> redirect ke login
-  if (!user && !isAuthPage && !isPublicPath) {
+  // Belum login & bukan halaman login -> redirect ke login
+  if (!user && !isAuthPage) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
