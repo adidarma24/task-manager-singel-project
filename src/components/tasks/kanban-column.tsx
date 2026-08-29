@@ -7,9 +7,11 @@ import { SortableTaskCard } from "./sortable-task-card";
 export function KanbanColumn({
   status,
   tasks,
+  onTaskClick,
 }: {
   status: TaskStatus;
   tasks: Task[];
+  onTaskClick?: (task: Task) => void;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
@@ -31,7 +33,11 @@ export function KanbanColumn({
           strategy={verticalListSortingStrategy}
         >
           {tasks.map((task) => (
-            <SortableTaskCard key={task.id} task={task} />
+            <SortableTaskCard
+              key={task.id}
+              task={task}
+              onClick={() => onTaskClick?.(task)}
+            />
           ))}
         </SortableContext>
       </div>

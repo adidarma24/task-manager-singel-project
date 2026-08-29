@@ -3,7 +3,13 @@ import { id as localeId } from "date-fns/locale";
 import type { Task } from "@/types";
 import { StatusBadge, PriorityBadge } from "./badges";
 
-export function TaskList({ tasks }: { tasks: Task[] }) {
+export function TaskList({
+  tasks,
+  onTaskClick,
+}: {
+  tasks: Task[];
+  onTaskClick?: (task: Task) => void;
+}) {
   return (
     <div className="overflow-hidden rounded-lg border">
       <table className="w-full text-sm">
@@ -18,7 +24,11 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
         </thead>
         <tbody className="divide-y">
           {tasks.map((task) => (
-            <tr key={task.id} className="hover:bg-muted/50">
+            <tr
+              key={task.id}
+              onClick={() => onTaskClick?.(task)}
+              className="cursor-pointer hover:bg-muted/50"
+            >
               <td className="px-4 py-3 font-medium">{task.title}</td>
               <td className="px-4 py-3">
                 <StatusBadge status={task.status} />

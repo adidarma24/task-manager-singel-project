@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import type { Task, TaskStatus } from "@/types";
 import { createClient } from "@/lib/supabase/client";
@@ -8,10 +8,25 @@ import { KanbanColumn } from "./kanban-column";
 
 const COLUMNS: TaskStatus[] = ["todo", "in_progress", "review", "done"];
 
-export function KanbanBoard({ initialTasks }: { initialTasks: Task[] }) {
+export function KanbanBoard({
+  initialTasks,
+  onTaskClick,
+}: {
+  initialTasks: Task[];
+  onTaskClick?: (task: Task) => void;
+}) {
   const [tasks, setTasks] = useState(initialTasks);
   const supabase = createClient();
-  const sensors = useSensors(useSensor(PointerSensor));
+
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      // Jarak minimum sebelum dianggap drag, supaya klik singkat tetap bisa buka edit
+      activationConstraint: { distance: 8 },
+    })
+  );
 
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -50,6 +65,7 @@ export function KanbanBoard({ initialTasks }: { initialTasks: Task[] }) {
             key={status}
             status={status}
             tasks={tasks.filter((t) => t.status === status)}
+            onTaskClick={onTaskClick}
           />
         ))}
       </div>

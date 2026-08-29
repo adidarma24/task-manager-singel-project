@@ -3,9 +3,18 @@ import { id as localeId } from "date-fns/locale";
 import type { Task } from "@/types";
 import { PriorityBadge } from "./badges";
 
-export function TaskCard({ task }: { task: Task }) {
+export function TaskCard({
+  task,
+  onClick,
+}: {
+  task: Task;
+  onClick?: () => void;
+}) {
   return (
-    <div className="rounded-md border bg-card p-3 shadow-sm transition hover:shadow-md">
+    <div
+      onClick={onClick}
+      className="cursor-pointer rounded-md border bg-card p-3 shadow-sm transition hover:shadow-md"
+    >
       <div className="mb-2 flex items-start justify-between gap-2">
         <h3 className="text-sm font-medium leading-snug">{task.title}</h3>
         <PriorityBadge priority={task.priority} />

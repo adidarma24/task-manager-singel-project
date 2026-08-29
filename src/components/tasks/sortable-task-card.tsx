@@ -3,7 +3,13 @@ import { CSS } from "@dnd-kit/utilities";
 import type { Task } from "@/types";
 import { TaskCard } from "./task-card";
 
-export function SortableTaskCard({ task }: { task: Task }) {
+export function SortableTaskCard({
+  task,
+  onClick,
+}: {
+  task: Task;
+  onClick?: () => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: task.id });
 
@@ -15,7 +21,7 @@ export function SortableTaskCard({ task }: { task: Task }) {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <TaskCard task={task} />
+      <TaskCard task={task} onClick={onClick} />
     </div>
   );
 }
