@@ -78,12 +78,13 @@ supabase/
 - Tambah, edit, dan hapus task lewat modal form (assign, status, prioritas, tenggat)
 - Role: Admin, Manager, Anggota (aturan akses diatur lewat Row Level Security di database)
 - **Kelola Tim**: Admin bisa membuat akun anggota baru langsung (email + password ditentukan Admin, tanpa email undangan) dan mengubah role anggota — langsung dari aplikasi
+- **Laporan**: ringkasan total task, tingkat penyelesaian, task terlambat, dan breakdown per status/prioritas/anggota — bisa diakses Admin & Manager
 
 ## Belum tersedia — rencana berikutnya
 
 - Komentar & lampiran file per task
 - Notifikasi
-- Dashboard laporan/analitik
+- Fitur ganti password sendiri (untuk anggota yang akunnya dibuat Admin)
 
 ## Mengembangkan lebih lanjut
 

@@ -2,14 +2,25 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutGrid, ListTodo, LogOut, Users } from "lucide-react";
+import { LayoutGrid, ListTodo, LogOut, Users, BarChart3 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { clsx } from "clsx";
 import type { UserRole } from "@/types";
 
-const navItems = [
-  { href: "/dashboard", label: "Task", icon: ListTodo, adminOnly: false },
-  { href: "/dashboard/team", label: "Kelola Tim", icon: Users, adminOnly: true },
+const navItems: {
+  href: string;
+  label: string;
+  icon: typeof ListTodo;
+  roles?: UserRole[];
+}[] = [
+  { href: "/dashboard", label: "Task", icon: ListTodo },
+  {
+    href: "/dashboard/reports",
+    label: "Laporan",
+    icon: BarChart3,
+    roles: ["admin", "manager"],
+  },
+  { href: "/dashboard/team", label: "Kelola Tim", icon: Users, roles: ["admin"] },
 ];
 
 export function Sidebar({
@@ -30,7 +41,7 @@ export function Sidebar({
   }
 
   const visibleItems = navItems.filter(
-    (item) => !item.adminOnly || role === "admin"
+    (item) => !item.roles || item.roles.includes(role)
   );
 
   return (
