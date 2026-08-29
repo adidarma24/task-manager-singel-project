@@ -48,11 +48,18 @@ export async function POST(request: Request) {
 
   const { email, full_name, role } = parsed.data;
 
+  // Deteksi domain asal request secara otomatis — sehingga link undangan
+  // otomatis mengarah ke localhost saat dites lokal, atau ke domain
+  // production saat dipakai di Vercel. Tidak perlu diatur manual.
+  const { origin } = new URL(request.url);
+  const redirectTo = `${origin}/auth/callback?next=/set-password`;
+
   // 4. Kirim undangan lewat service_role key (server-only)
   const adminClient = createAdminClient();
 
   const { error } = await adminClient.auth.admin.inviteUserByEmail(email, {
     data: { full_name, role },
+    redirectTo,
   });
 
   if (error) {
